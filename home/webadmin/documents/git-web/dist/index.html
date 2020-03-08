@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Web-Git Admin Tools</title>
+    <script src="https://unpkg.com/lodash@4.16.6"></script>
+    <link rel="stylesheet" href="./style/app.css">
+  </head>
+  <body>
+
+    <div>
+      <a href="./howto.html">Getting Started</a>
+    </div>
+
+    <div class="text-center">
+      <h1>Web-Git Tools</h1>
+
+      <div class="row">
+        <p><strong>Output: </strong> <span id="output-msg"></span></p>
+        <p><strong>Link: </strong> <span id="output-link"></span></p>
+      </div>
+
+      <div class="row">
+        <select id="repo_list" size="20">
+          <option selected="selected" value="null"></option>
+        </select>
+      </div>
+  
+
+      <div class="row">
+          <p> Repository Name: <input type="text" id="repo_input"> </p>
+      </div>
+      
+      <div class="row">
+        <button id="create_repo">Create Repository</button>
+        <button id="list_repos">List Repositories</button>
+      </div>
+
+      
+
+      
+
+      <div class="row">
+        <br/> <br/>
+        <p>Public SSH Key</p>
+        <textarea id="ssh_pub" rows="2" cols="50"></textarea>
+        <br/>
+        <button id="submit_key">Submit Key</button>
+        <br/>
+    </div>
+
+
+    </div>
+
+    <script src="./bundle.js"></script>
+  </body>
+</html>
