@@ -23,6 +23,18 @@ docker run --name=git-server -it \
             git-server                              # Image Name to Run
 ```
 
+## Usage
+
+**View / Add Repository**
+
+In order to view or add a new repository, go to `localhost:80` on your favorite browser.
+
+
+**Cloning Repository**
+
+After creating a repository or clicking on the repository that will be cloned on `localhost:80`, an SSH link will be provided. Copy the link and run `git clone` to clone the repository.
+
+
 ---
 ### License
 Licensed under the [MIT License](LICENSE).
