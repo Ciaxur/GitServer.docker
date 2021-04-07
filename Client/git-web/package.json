@@ -1,11 +1,9 @@
 {
-  "name": "git-web-server",
-  "version": "1.0.2",
+  "name": "git-web",
+  "version": "1.1.0",
   "description": "Simple Git Website to modify repositories on the Git Server using Express.js.",
   "main": "dist/index.js",
   "scripts": {
-    "start-server": "node ./src/server.js",
-    "test": "node ./src/test.js",
     "build-web": "webpack",
     "watch-web": "webpack --watch",
     "update-ip": "./scripts/updateIP.sh",
@@ -15,14 +13,10 @@
   "author": "Omar Omar",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^12.6.2",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.6"
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.6.0"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
     "node-fetch": "^2.6.1"
   }
 }

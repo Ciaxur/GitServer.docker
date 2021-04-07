@@ -1,33 +1,31 @@
-# Simple-Git-Server
-Quick, Simple, and Easy Git-Server running in Docker.
+# Git-Server.docker 🐋
+Quick, Simple, and Easy Git-Server running in a Docker Container.
 
-## Overview
+## Overview 🎊
 The Git Server will run locally, exposed to `Port 80` and `Port 3000`.
+`Port 22` is also exposed for SSH Cloning from the running Container.
 
-`Port 22` is also exposed for quick SSH-ing into the running Container remotely.
+## Setup 🔧
+Prior to starting the services, configure the [docker-compose.yaml](docker-compose.yaml) file to your liking.
 
-## Setup
-Building and Setting up the Git-Server using **Make**
+Most notible Modifications:
+- `WEBADMIN_PASS`: For both **git-web** and **git-server**. The webadmin Encrypted Password
+- `SERVER_PASS`: For **git-server**. The webadmin Encrypted Password
+
+**IMPORTANT**: In order to generate an encrypted password hash, run `openssl passwd -salt xyz -6 123`, with your own `hash (xyz)` and `password (123)`. Paste with result into the [docker-compose.yaml](docker-compose.yaml) file with an additional '$' for every '$', like the example demonstrates.
+
+
+## Build & Run 📦
+`Docker-Compose` is required to get started.
 ```bash
-make build  # Builds the Image, tagging as 'git-server'
-make run    # Runs a Container name 'git-server' and places you into the Shell
-# Ctrl+p+q escapes the Container, leaving it running
-```
-
-Building and Setting up the Git-Server using **docker** CLI
-```bash
-docker build . -t git-server    # Builds the Image, tagging as 'git-server'
-docker run --name=git-server -it \
-            -p 80:80 -p 3000:3000 -p 22:22 \        # Expose required Ports
-            -v ~/Shared:/home/git/repositories \    # Shares Directory with Container, HAS to be Absolute Path!
-            git-server                              # Image Name to Run
+docker-compose up
 ```
 
 ## Usage
 
 **View / Add Repository**
 
-In order to view or add a new repository, go to `localhost:80` on your favorite browser.
+In order to view or add a new repository, go to `localhost:8080` on your favorite browser.
 
 
 **Cloning Repository**

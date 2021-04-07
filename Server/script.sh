@@ -1,24 +1,28 @@
 #!/bin/sh
 
 # Setup Users
-adduser git
-adduser webadmin
+adduser -D git
+adduser -D webadmin
+
+# Configure Passwords
+usermod -p $SERVER_PASS git
+usermod -p $WEBADMIN_PASS webadmin
+
+# Clear Variables
+unset WEBADMIN_PASS
+unset SERVER_PASS
 
 # Git Configuration
 git config --global user.name "git-server"
 git config --global user.email "root@localhost"
 
 # DIR VARIABLES
-GIT_WEB="webadmin/documents/git-web"
-
-# Run Web Server
-cp $GIT_WEB/dist/* /var/www/localhost/htdocs/ -r
-httpd&
+GIT_SERVER="webadmin/git-server"
 
 # Init Repos & Copy over Repos
 # And setup Permissions
 REPO_DIR='/home/git/repositories'
-mkdir /repos
+mkdir -p /repos
 
 echo "Linking Repositories to /repos"
 for d in $REPO_DIR/* ; do
@@ -35,14 +39,12 @@ for d in $REPO_DIR/* ; do
 done
 
 
-# Run Git Server
-echo "Starting Web-Server..."
-$(nohup node $GIT_WEB/src/server.js > /tmp/git-server.log >&1)&
-
 # Setup sshd
 ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
 ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
 /usr/sbin/sshd -D&
 
-# Stay in Shell (TESTING)
-sh
+# Run Git Server
+echo "Starting Web-Server..."
+mkdir -p /logs
+nohup node $GIT_SERVER/src/server.js > /logs/git-server.log >&1
