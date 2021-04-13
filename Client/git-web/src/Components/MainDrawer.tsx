@@ -1,4 +1,6 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { 
   Drawer, IconButton,
   List, ListItem, ListItemIcon, ListItemText,
@@ -43,6 +45,7 @@ interface Props {
 function MainDrawer({ onMenuToggle, isOpen }: Props) {
   // Hooks
   const styles = useStyles();
+  const history = useHistory();
 
   // Render
   return (
@@ -66,7 +69,7 @@ function MainDrawer({ onMenuToggle, isOpen }: Props) {
       </div>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem button onClick={() => history.push('/new-repo')}>
           <ListItemIcon> <GitHub /> </ListItemIcon>
           <ListItemText primary='Create New Repo' />
         </ListItem>

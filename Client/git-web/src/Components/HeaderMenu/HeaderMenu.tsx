@@ -1,15 +1,18 @@
 import React from 'react';
+
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
   InputBase,
-  makeStyles,
-  fade,
+  makeStyles, fade,
 } from '@material-ui/core';
 import { MenuOutlined, SearchOutlined } from '@material-ui/icons';
-import { ColorPalette } from '../Styles';
+
+// Style & Component Imports
+import { ColorPalette } from '../../Styles';
+import URLRouteBreadcrumb from './URLRouteBreadcrumb';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -69,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+
 interface Props {
   onMenuToggle: () => void,
 }
@@ -93,6 +99,8 @@ function HeaderMenu({ onMenuToggle }: Props) {
           <Typography className={styles.title} variant="h6">
             GitServer.docker
           </Typography>
+
+          <URLRouteBreadcrumb grow />
 
           <div className={styles.search}>
             <div className={styles.searchIcon}>
