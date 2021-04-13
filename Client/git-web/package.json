@@ -1,22 +1,44 @@
 {
   "name": "git-web",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Simple Git Website to modify repositories on the Git Server using Express.js.",
-  "main": "dist/index.js",
-  "scripts": {
-    "build-web": "webpack",
-    "watch-web": "webpack --watch",
-    "update-ip": "./scripts/updateIP.sh",
-    "publish-web": "npm run update-ip && npm run build-web && ./scripts/publishDist.sh"
-  },
-  "keywords": [],
   "author": "Omar Omar",
   "license": "MIT",
-  "devDependencies": {
-    "webpack": "^5.28.0",
-    "webpack-cli": "^4.6.0"
-  },
+  "homepage": "/",
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@types/node": "^12.20.7",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "typescript": "^4.2.4",
+    "web-vitals": "^1.1.1"
+  },
+  "scripts": {
+    "start": "set port=3000 && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

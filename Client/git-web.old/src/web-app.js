@@ -1,10 +1,10 @@
 /**
  * Main Webpack Application Entry Point
  */
-const fetch = require("node-fetch");
+import fetch from 'node-fetch';
 
 // Server Data
-const IP = "192.168.0.185";
+const IP = process.env.IP;
 const PORT = 3000;
 
 // Variables for Element ID's
@@ -167,6 +167,7 @@ repo_create_btn.onclick = () => {
 repo_list_btn.onclick = () => {
   // Repo-List Button
   // Proceed with Request
+  console.log(`DEBUG: IP(${IP})`);
 
   // Send Request
   fetch(`http://${IP}:${PORT}/list_repositories`)

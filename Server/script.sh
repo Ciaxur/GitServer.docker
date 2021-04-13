@@ -47,4 +47,4 @@ ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa
 # Run Git Server
 echo "Starting Web-Server..."
 mkdir -p /logs
-nohup node $GIT_SERVER/src/server.js > /logs/git-server.log >&1
+cd $GIT_SERVER && nohup npm run start-server > /logs/git-server.log >&1

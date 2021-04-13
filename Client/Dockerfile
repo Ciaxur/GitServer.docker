@@ -16,8 +16,8 @@ RUN echo "Configuring NPM Proxy..." && \
 	npm config set proxy "$HTTP_PROXY" && \ 
 	echo "Installing NPM Packages..." && \
 	cd ./webadmin/git-web && npm i && \
-	echo "Running Web App..." && \
-	npm run build-web
+	echo "Running React Web App..." && \
+	npm run build
 
 # Explicitly Expose HTTP Port
 EXPOSE 80
