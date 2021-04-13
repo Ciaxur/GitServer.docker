@@ -2,29 +2,40 @@ import React from 'react';
 import './Styles/App.css';
 
 // Material UI Imports
-import {} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  makeStyles,
+} from '@material-ui/core';
 
 // Component Imports
 import HeaderMenu from './Components/HeaderMenu';
+import MainDrawer from './Components/MainDrawer';
 
 const useStyles = makeStyles({
   container: {
-    backgroundColor: 'red',
     margin: 0,
     padding: 0,
   },
 });
 
-
 function App() {
   // Hooks
   const styles = useStyles();
+
+  // States
+  const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
+  
+  // Callbacks
+  const onMenuToggle = () => setDrawerOpen(!isDrawerOpen);
   
   return (
     <div className={ styles.container }>
-      {/* TODO: Add App Bar */}
-      <HeaderMenu />
+      <MainDrawer 
+        isOpen={isDrawerOpen}
+        onMenuToggle={onMenuToggle}
+      />
+      <HeaderMenu onMenuToggle={onMenuToggle} />
+      
+      
 
       
       {/* TODO: Add Drawer (Mini Collapsable Menu) */}
