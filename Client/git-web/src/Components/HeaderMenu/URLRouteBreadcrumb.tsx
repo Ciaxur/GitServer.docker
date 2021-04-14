@@ -1,5 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { RootStoreContext } from '../../Store/RootStore';
+import { ColorPalette} from '../../Styles';
 import {
   Typography,
   Breadcrumbs, Link,
@@ -10,6 +12,10 @@ import {
 const useStyles = makeStyles({
   link: {
     cursor: 'pointer',
+    color: ColorPalette.whiteFont,
+  },
+  primaryRoute: {
+    color: ColorPalette.bluePrimary,
   },
 });
 
@@ -22,11 +28,11 @@ function SeperatedRoute(props: Props) {
   // Hooks
   const history = useHistory();
   const styles = useStyles();
-  const [isFresh, setFresh] = React.useState<boolean>(false);
+  const rootStore = React.useContext(RootStoreContext);
   
   const urlPath = React.useMemo(
-    () => history.location.pathname.split('/'),
-    [ history.location.pathname ],
+    () => rootStore.routePath.split('/'),
+    [ rootStore.routePath ],
   );
 
   // Callbacks
@@ -35,7 +41,7 @@ function SeperatedRoute(props: Props) {
   return (
     <Breadcrumbs separator='›' style={{ flexGrow: props.grow ? 1 : 'unset' }}>
       <Link className={styles.link} color="inherit" onClick={() => {
-        setFresh(!isFresh);
+        rootStore.setRoutePath('/');
         history.push('/');
       }}>
         Home
@@ -47,7 +53,7 @@ function SeperatedRoute(props: Props) {
         </Link>
       ))}
 
-      <Typography color="textPrimary">{urlPath.slice(-1)}</Typography>
+      <Typography className={styles.primaryRoute} color="textPrimary">{urlPath.slice(-1)}</Typography>
     </Breadcrumbs>
   );
 }

@@ -79,7 +79,7 @@ interface Props {
   onMenuToggle: () => void,
 }
 
-function HeaderMenu({ onMenuToggle }: Props) {
+function HeaderMenu(props: Props) {
   // Hooks
   const styles = useStyles();
 
@@ -91,7 +91,7 @@ function HeaderMenu({ onMenuToggle }: Props) {
             className={styles.menuButton}
             edge="start"
             color="inherit"
-            onClick={onMenuToggle}
+            onClick={props.onMenuToggle}
           >
             <MenuOutlined />
           </IconButton>

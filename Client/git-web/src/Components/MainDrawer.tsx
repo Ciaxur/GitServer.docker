@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { RootStoreContext } from '../Store/RootStore';
 
 import { 
   Drawer, IconButton,
@@ -46,7 +47,14 @@ function MainDrawer({ onMenuToggle, isOpen }: Props) {
   // Hooks
   const styles = useStyles();
   const history = useHistory();
+  const rootStore = React.useContext(RootStoreContext);
 
+  // Methods
+  const goto = (url: string, path: string) => {
+    rootStore.setRoutePath(path);
+    history.push(url);
+  };
+  
   // Render
   return (
     <Drawer
@@ -69,7 +77,7 @@ function MainDrawer({ onMenuToggle, isOpen }: Props) {
       </div>
       <Divider />
       <List>
-        <ListItem button onClick={() => history.push('/new-repo')}>
+        <ListItem button onClick={() => goto('/new-repo', 'New Repo')}>
           <ListItemIcon> <GitHub /> </ListItemIcon>
           <ListItemText primary='Create New Repo' />
         </ListItem>
