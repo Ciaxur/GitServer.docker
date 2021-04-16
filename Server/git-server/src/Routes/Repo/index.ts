@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { IRepository, RepositorySchema } from '../../Schema/Repository';
+import { BadRequest } from '../../Middlewares/ErrorHandler/ErrorUtils';
 const app = Router();
 
 
@@ -35,16 +36,12 @@ app.post('/', (req, res) => {
   const body: IRepository = req.body;
   const bodyValidation = RepositorySchema.validate(body);
   if (bodyValidation.error || hasSpace(body.title)) {
-    return res
-      .status(400)
-      .json({
-        error: {
-          message: 'Invalid Request',
-          debug: bodyValidation.error
-            ? bodyValidation
-            : 'Title has spaces',
-        },
-    });
+    throw new BadRequest(
+      'Invalid Request',
+      bodyValidation.error
+        ? bodyValidation
+        : 'Title has spaces'
+    );
   }
    
   // TODO: Ensure NO spaces
