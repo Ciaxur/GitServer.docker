@@ -11,6 +11,8 @@ export const ColorPalette = {
 
 export const PaperElementPalette = {
   white:          '#ECF0F1',
+  gray:           '#E4E7E8',
+  darkGray:       '#B0BAC3',
   black:          '#2C3E50',
   red:            '#E74C3C',
   bluePrimary:    '#2980B9',
