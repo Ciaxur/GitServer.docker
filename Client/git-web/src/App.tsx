@@ -19,6 +19,9 @@ import {
 import HeaderMenu from './Components/HeaderMenu/HeaderMenu';
 import MainDrawer from './Components/MainDrawer';
 
+// Route Imports
+import Home from './Routes/Home';
+
 const useStyles = makeStyles({
   container: {
     margin: 0,
@@ -57,7 +60,9 @@ function App() {
 
           {/* React Router */}
           <Switch>
-            <Route exact path='/'></Route>
+            <Route exact path='/'>
+              <Home />
+            </Route>
             <Route path='/new-repo'>
               <h1 style={{ textAlign: 'center' }}>New Repo</h1>
             </Route>

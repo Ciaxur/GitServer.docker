@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -100,7 +99,10 @@ function HeaderMenu(props: Props) {
             GitServer.docker
           </Typography>
 
-          <URLRouteBreadcrumb grow />
+          <URLRouteBreadcrumb style={{
+            marginLeft: '40px',
+            flex: 1,
+          }}/>
 
           <div className={styles.search}>
             <div className={styles.searchIcon}>

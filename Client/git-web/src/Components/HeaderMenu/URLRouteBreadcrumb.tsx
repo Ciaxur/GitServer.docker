@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 
 
 interface Props {
-  grow?: boolean,
+  style?: React.CSSProperties,
 }
 
 function SeperatedRoute(props: Props) {
@@ -39,7 +39,7 @@ function SeperatedRoute(props: Props) {
   const handleClick = () => { console.log('click'); };
 
   return (
-    <Breadcrumbs separator='›' style={{ flexGrow: props.grow ? 1 : 'unset' }}>
+    <Breadcrumbs separator='›' style={props.style}>
       <Link className={styles.link} color="inherit" onClick={() => {
         rootStore.setRoutePath('/');
         history.push('/');
