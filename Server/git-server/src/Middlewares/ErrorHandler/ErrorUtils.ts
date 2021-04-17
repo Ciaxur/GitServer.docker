@@ -17,14 +17,18 @@ class GeneralError extends Error {
       return 400;
     else if (this instanceof NotFound)
       return 404;
+    else if (this instanceof InternalError)
+      return 500;
   }
 }
 
 class BadRequest extends GeneralError {}
 class NotFound extends GeneralError {}
+class InternalError extends GeneralError {}
 
 export {
   GeneralError,
   BadRequest,
   NotFound,
+  InternalError,
 }

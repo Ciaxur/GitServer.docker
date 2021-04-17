@@ -7,7 +7,7 @@ const ErrorHandler = (err: GeneralError, req: Request, res: Response, _: NextFun
       .status(err.getCode())
       .json({ error: err.message, debug: err.debug });
   }
-  return res.status(500).json({ error: 'Internal Error.' });
+  return res.status(500).json({ error: 'Internal Error.', debug: err });
 };
 
 export default ErrorHandler;
