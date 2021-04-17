@@ -13,6 +13,7 @@ import {
 // Store Imports
 import {
   RootStoreContext, RootStoreReducer,
+  RootStoreDefault, IRootStore,
 } from './Store/RootStore';
 
 // Component Imports
@@ -34,11 +35,12 @@ function App() {
   const styles = useStyles();
 
   // Root Store
-  const [rootStore, rootStoreDispatch] = React.useReducer(RootStoreReducer, {
-    routePath: '/',
-    setRoutePath: () => { return; },
-  });
-  
+  const [rootStore, rootDispatch] = React.useReducer(RootStoreReducer, RootStoreDefault as IRootStore);
+
+  const contextValue = React.useMemo(() => {
+    return { store: { ...rootStore.store }, dispatch: rootDispatch };
+  }, [rootStore, rootDispatch]);
+
   // States
   const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
   
@@ -46,10 +48,7 @@ function App() {
   const onMenuToggle = () => setDrawerOpen(!isDrawerOpen);
 
   return (
-    <RootStoreContext.Provider value={{
-      routePath: rootStore.routePath,
-      setRoutePath: newRoutePath => rootStoreDispatch({ payload: newRoutePath, type: 'SET_ROUTE' }),
-    }} >
+    <RootStoreContext.Provider value={contextValue} >
       <Router>
         <div className={styles.container}>
           <MainDrawer

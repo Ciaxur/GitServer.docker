@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { RootStoreContext } from '../../Store/RootStore';
+import * as RootStoreActions from '../../Store/RootStore/Actions';
 import { ColorPalette} from '../../Styles';
 import {
   Typography,
@@ -28,11 +29,11 @@ function SeperatedRoute(props: Props) {
   // Hooks
   const history = useHistory();
   const styles = useStyles();
-  const rootStore = React.useContext(RootStoreContext);
+  const { store, dispatch } = React.useContext(RootStoreContext);
   
   const urlPath = React.useMemo(
-    () => rootStore.routePath.split('/'),
-    [ rootStore.routePath ],
+    () => store.routePath.split('/'),
+    [ store.routePath ],
   );
 
   // Callbacks
@@ -41,7 +42,7 @@ function SeperatedRoute(props: Props) {
   return (
     <Breadcrumbs separator='›' style={props.style}>
       <Link className={styles.link} color="inherit" onClick={() => {
-        rootStore.setRoutePath('/');
+        RootStoreActions.setRoutePath('/', dispatch);
         history.push('/');
       }}>
         Home

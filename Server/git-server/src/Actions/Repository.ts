@@ -16,6 +16,7 @@ export function listRepositories(): string[] {
     .toString()
     .trim()
     .split('\n')
+    .filter(elt => elt.length > 0)
 }
 
 /**

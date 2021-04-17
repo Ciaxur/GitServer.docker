@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { RootStoreContext } from '../Store/RootStore';
+import * as RootStoreActions from '../Store/RootStore/Actions';
 
 import { 
   Drawer, IconButton,
@@ -13,6 +14,7 @@ import {
   ChevronRightOutlined, ChevronLeftOutlined,
   GitHub,
 } from '@material-ui/icons';
+
 
 const drawerWidth = 240;
 const useStyles = makeStyles( theme => ({
@@ -51,7 +53,7 @@ function MainDrawer({ onMenuToggle, isOpen }: Props) {
 
   // Methods
   const goto = (url: string, path: string) => {
-    rootStore.setRoutePath(path);
+    RootStoreActions.setRoutePath(path, rootStore.dispatch);
     history.push(url);
   };
   

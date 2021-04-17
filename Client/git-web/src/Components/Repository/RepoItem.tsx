@@ -44,7 +44,7 @@ const useStyles = makeStyles( theme => ({
 
 interface Props {
   name:         string,
-  description:  string,
+  description?: string,
   updatedAt:    Date,
   onClick?:     () => void,
 }
@@ -56,7 +56,7 @@ function RepoItem({ name, description, updatedAt, onClick }: Props) {
   return (
     <Paper className={styles.paper} variant='outlined' onClick={onClick}>
       <Typography variant='subtitle1'>{name}</Typography>
-      <Typography className={styles.infoText} variant='body2'>{description}</Typography>
+      <Typography className={styles.infoText} variant='body2'>{description || ''}</Typography>
       <Typography className={`${styles.infoText} ${styles.mute}`} variant='caption'>
         Updated {updatedAt.toLocaleString()}
       </Typography>

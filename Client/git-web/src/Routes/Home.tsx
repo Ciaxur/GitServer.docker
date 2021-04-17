@@ -10,7 +10,7 @@ import '../Components/Repository/RepoList';
 import RepoList from '../Components/Repository/RepoList';
 
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     paddingTop: 50,
