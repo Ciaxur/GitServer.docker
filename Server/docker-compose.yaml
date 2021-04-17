@@ -1,0 +1,15 @@
+# TEST: Testing Only Docker Compose
+#  Build and Maps Volume to container for testing
+version: '3.9'
+services:
+  git-server:
+    build: .
+    environment:
+      SERVER_PASS: "$$6$$xyz$$73Q3Z.l5kN5BNAGMmP5IKozhqw3Zhj8bqQuJy3.Wf44.I3/nkSnzPMeX6rozvFiDHgi2DIt/BOc/lt14/2PH91"
+      WEBADMIN_PASS: "$$6$$xyz$$73Q3Z.l5kN5BNAGMmP5IKozhqw3Zhj8bqQuJy3.Wf44.I3/nkSnzPMeX6rozvFiDHgi2DIt/BOc/lt14/2PH91"
+      DEBUG_ENABLE: "true"
+    volumes:
+      - './git-server/build:/home/webadmin/git-server/build'
+    ports:
+      - "3000:3000"
+      - "22:22"

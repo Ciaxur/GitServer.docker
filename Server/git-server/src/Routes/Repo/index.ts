@@ -17,7 +17,7 @@ app.get('/', (_, res) => {
 });
 
 /**
- * @param req: Params have the Repository ID
+ * @param req: Parameter has the Repo Title
  * @param res: Fetches given Repository
  */
 app.get('/:title', (req, res) => {
@@ -69,6 +69,22 @@ app.post('/', (req, res) => {
     debug: creationResult,
   });
 });
+
+
+/**
+ * @param req: Parameter has the Repo Title
+ * @param res: Result of Removing Repository
+ */
+app.delete('/:title', (req, res) => {
+  const { title } = req.params;
+  
+  const removalResponse = Repo.removeRepository(title);
+
+  res.json({
+    message: 'Removed Repository 🗑',
+    debug: removalResponse,
+  });
+})
 
 // Helper Functions
 /**
