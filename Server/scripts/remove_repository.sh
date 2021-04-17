@@ -13,7 +13,7 @@
 
 
 # Have a Main Directory to Work with
-REPO_DIR="/home/git/repositories/"
+REPO_DIR="/home/git/"
 
 # Change into Repo Directory
 cd $REPO_DIR
@@ -37,10 +37,6 @@ if [ ! -z "$1" ];then
     echo "Removing Repository '$REPO_NAME'..."
     rm -r "$REPO_NAME"
     
-    # Remove Soft-Link in Root/repos
-    echo "Removing Soft Link to Repository in /repos..."
-    rm /repos/$REPO_NAME
-
     # Exit Success
     echo "Repository Removed Successfuly!"
     echo "Status: 0"                        # Success!

@@ -21,17 +21,14 @@ GIT_SERVER="webadmin/git-server"
 
 # Init Repos & Copy over Repos
 # And setup Permissions
-REPO_DIR='/home/git/repositories'
-mkdir -p /repos
+REPO_DIR='/home/git'
 
-echo "Linking Repositories to /repos"
+echo "Setup Repository Permisions"
 for d in $REPO_DIR/* ; do
 	file=`basename $d`
 
 	# Make sure it Exists
 	if [ -d "$REPO_DIR/$file" ]; then
-		ln -s $d /repos/$file
-	
 		# Set Permissions
 		chgrp -R git $d
 		chown -R git $d

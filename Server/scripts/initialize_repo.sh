@@ -6,8 +6,6 @@ if [ "$1" = "" ]; then
     exit 1
 fi
 
-
-
 # Generate Random temp directory
 echo "Generating temp files..."
 DIR_NAME=`date | md5sum | sed 's/\s.*$//'`

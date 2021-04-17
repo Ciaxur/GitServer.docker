@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { IRepository, RepositorySchema } from '../../Schema/Repository';
-import { BadRequest, InternalError } from '../../Middlewares/ErrorHandler/ErrorUtils';
-import { spawnSync } from 'child_process';
+import { BadRequest } from '../../Middlewares/ErrorHandler/ErrorUtils';
+import * as Repo from '../../Actions/Repository';
 const app = Router();
 
 
@@ -10,17 +10,9 @@ const app = Router();
  * @param res: Fetches List of all Repositories on the Server
  */
 app.get('/', (_, res) => {
-  const exec = spawnSync('sh', ['/home/git/scripts/list_repositories.sh']);
-  if (exec.error)
-    throw new InternalError('Could not list repositories 🐞');
-
   res.json({
     message: 'Repository List Successfull! 📦',
-    data: exec
-      .stdout
-      .toString()
-      .trim()
-      .split('\n'),
+    data: Repo.listRepositories(),
   });
 });
 
@@ -32,24 +24,21 @@ app.get('/:title', (req, res) => {
   const { title } = req.params;
 
   // Get Repository List
-  const exec = spawnSync('sh', ['/home/git/scripts/list_repositories.sh']);
-  if (exec.error)
-    throw new InternalError('Could not list repositories 🐞');
+  const repoList = Repo.listRepositories();
 
   // Assign target '.git' to the end if not given
   const target = /.*.git/i.test(title) ? title.toLowerCase() : `${title.toLowerCase()}.git`;
   
   // Search for Repository
-  const repoResult = exec
-    .stdout
-    .toString()
-    .trim()
-    .split('\n')
+  const repoResult = repoList
     .filter(repo => target === repo.toLowerCase())
 
   res.json({
     message: repoResult.length ? 'Repository Search found. 🚀' : 'Repository not found 😪',
-    data: repoResult.length ? repoResult[0] : null,
+    data: repoResult.length ? {
+      name: repoResult[0],
+      link: `git@localhost:${repoResult[0]}`,
+    } : null,
   });
 });
 
@@ -70,21 +59,14 @@ app.post('/', (req, res) => {
     );
   }
 
-  // TODO: Check for Duplicate prior to creating repository
-  
   // Execute & Check for Errors
-  const exec = spawnSync('sh', [
-    "/home/git/scripts/create_new_repository.sh",
-    body.title,
-  ]);
-  
-  if (exec.error) {
-    throw new BadRequest(exec.error.message);
-  }
+  const creationResult = Repo.createRepository({
+    title: body.title,
+  });
   
   res.json({
     message: `Repository "${body.title}" created successfuly 📦!`,
-    debug: exec.stdout.toString().trim().split('\n'),
+    debug: creationResult,
   });
 });
 

@@ -9,7 +9,7 @@ RUN \
 # Copy Required Files
 COPY ./git-server /home/webadmin/git-server
 COPY ./script.sh /home/
-COPY ./git /home/git
+COPY ./scripts /home/scripts
 WORKDIR /home
 
 # Configure NPM Proxy and Install Node Packges

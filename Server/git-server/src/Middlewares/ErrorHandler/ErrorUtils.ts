@@ -17,6 +17,8 @@ class GeneralError extends Error {
       return 400;
     else if (this instanceof NotFound)
       return 404;
+    else if (this instanceof Conflict)
+      return 409;
     else if (this instanceof InternalError)
       return 500;
   }
@@ -25,10 +27,12 @@ class GeneralError extends Error {
 class BadRequest extends GeneralError {}
 class NotFound extends GeneralError {}
 class InternalError extends GeneralError {}
+class Conflict extends GeneralError {}
 
 export {
   GeneralError,
   BadRequest,
   NotFound,
   InternalError,
+  Conflict,
 }
