@@ -2,7 +2,7 @@
   "name": "git-server",
   "version": "1.1.0",
   "description": "Simple Git Server to modify repositories on the Git Server using Express.js.",
-  "main": "src/app.js",
+  "main": "build/app.js",
   "scripts": {
     "start": "tsc && node ./build/app.js",
     "start-dev": "concurrently \"tsc --watch\" \"nodemon ./build/app.js\" ",
