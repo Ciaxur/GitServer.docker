@@ -22,6 +22,7 @@ import MainDrawer from './Components/MainDrawer';
 
 // Route Imports
 import Home from './Routes/Home';
+import NewRepo from './Routes/NewRepo';
 
 const useStyles = makeStyles({
   container: {
@@ -63,7 +64,7 @@ function App() {
               <Home />
             </Route>
             <Route path='/new-repo'>
-              <h1 style={{ textAlign: 'center' }}>New Repo</h1>
+              <NewRepo />
             </Route>
           </Switch>
 

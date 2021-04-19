@@ -8,6 +8,7 @@ export interface IRootStore {
 
     // Repository Store
     repoStore: {
+      loaded:     boolean,
       repoList:   IRepository[],
     },
   },
@@ -48,6 +49,7 @@ export const RootStoreReducer = (state: IRootStore, action: IRootStoreAction): I
           ...state.store,
           repoStore: {
             ...state.store.repoStore,
+            loaded:   true,
             repoList: payload,
           },
         },
@@ -77,6 +79,7 @@ export const RootStoreDefault: Partial<IRootStore> = {
   store: {
     routePath: '/',
     repoStore: {
+      loaded: false,
       repoList: [],
     },
   },
