@@ -5,11 +5,11 @@
 #
 # Description:
 #   - Script that finds and deletes given repository
-#       from the Repo Directory and its Soft Link
+#       from the Repo Directory
 #
 # Author:           Omar Omar
 # Date Created:     July 10, 2019
-# Last Modified:    July 12, 2019
+# Last Modified:    April 19, 2021
 
 
 # Have a Main Directory to Work with

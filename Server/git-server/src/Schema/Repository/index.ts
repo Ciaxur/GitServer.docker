@@ -7,6 +7,6 @@ export interface IRepository {
 }
 
 export const RepositorySchema = Joi.object<IRepository>({
-  title: Joi.string().alphanum().min(3).max(32).trim(),
+  title: Joi.string().required().alphanum().min(3).max(32).trim(),
   description: Joi.string().optional().max(128).trim(),
 });

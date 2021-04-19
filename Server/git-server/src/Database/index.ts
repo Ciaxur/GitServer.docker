@@ -122,7 +122,7 @@ export class RepositoryDB {
    * Updated Repository Entry in database
    * @param repoName Repository Name to Change
    * @param repo Repository Object to update to
-   * @returns New Repostiroy Object that was updated
+   * @returns Old Repository Object that was updated
    */
   public async update(repoName:string, repo: IRepository): Promise<IRepositoryQuery> {
     return this.repoModel.findOneAndUpdate({ 
