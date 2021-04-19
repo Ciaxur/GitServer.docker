@@ -46,7 +46,6 @@ export class RepositoryDB {
 
     // Create & Save Models
     this.repoModel = mongoose.model('Repository', RepositorySchema);
-    console.log('repo model', this.repoModel);
   }
 
   /**
@@ -79,30 +78,31 @@ export class RepositoryDB {
    * @throws Internal Fetch Error
    * @returns Promise of Array of Repositories
    */
-  public async getAll() {                       // TODO: Fix & Clean up Return Type
-    return this.repoModel.find({});
+  public async getAll(): Promise<IRepositoryQuery[]> {
+    return this.repoModel.find({}) as any;
   }
 
   /**
    * Inserts a New Repository entry into the Table
    * @param newRepo New Repository to insert
+   * @throws Error on Duplicate and other Errors
    * @returns Promise of Executing the Query
    */
-  public async insert(newRepo: IRepository) {   // TODO: Fix & Clean up Return Type
+  public async insert(newRepo: IRepository): Promise<IRepositoryQuery> {
       return this.repoModel.create({
         _title: newRepo.title,
         title: newRepo.title,
         description: newRepo.description || '',
-      });
+      }) as any;
   }
 
   /**
    * Fetches Repository Entry in database
    * @param repoName Repository Name (Primary Key)
-   * @returns Repository Query Result
+   * @returns Repository Query Result Array
    */
-  public async get(repoName: string) {          // TODO: Fix & Clean up Return Type
-    return this.repoModel.find({ _title: repoName.toLowerCase() });
+  public async get(repoName: string): Promise<IRepositoryQuery[]> {
+    return this.repoModel.find({ _title: repoName.toLowerCase() }) as any;
   }
 
   /**
@@ -110,23 +110,27 @@ export class RepositoryDB {
    * @param repoName Repository Name (Primary Key)
    * @returns State of Removal
    */
-  public async remove(repoName: string) {       // TODO: Fix & Clean up Return Type
-    return this.repoModel.deleteOne({ _title: repoName.toLowerCase() });
+  public async remove(repoName: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.repoModel.deleteOne({ _title: repoName.toLowerCase() })
+        .then(res => resolve(res.deletedCount > 0))
+        .catch(err => reject(err));
+    });
   }
 
   /**
    * Updated Repository Entry in database
    * @param repoName Repository Name to Change
    * @param repo Repository Object to update to
-   * @returns State of Update
+   * @returns New Repostiroy Object that was updated
    */
-  public async update(repoName:string, repo: IRepository) {      // TODO: Fix & Clean up Return Type
+  public async update(repoName:string, repo: IRepository): Promise<IRepositoryQuery> {
     return this.repoModel.findOneAndUpdate({ 
       _title: repoName.toLowerCase() 
     }, {
       _title: repo.title,
       title: repo.title,
       updatedAt: Date.now(),
-    });
+    }) as any;
   }
 }
