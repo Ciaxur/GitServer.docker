@@ -33,6 +33,13 @@ app.use('/repo', Repo);
 app.use(methodOverride());
 app.use(ErrorHandler);
 
+// Not found Route
+app.use('/*', (_, res) => {
+  res
+    .status(404)
+    .json({ message: 'Not Found 😾'})
+});
+
 // Bind & Listen on Port
 console.log('GitServer: Listening on port 3000');
 app.listen(3000);
