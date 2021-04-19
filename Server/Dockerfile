@@ -4,7 +4,7 @@ FROM alpine:latest
 RUN \
 	echo "Installing Alpine Packages..." && \
 	apk upgrade --update-cache --available && \
-	apk add git nodejs npm openssh openssl shadow
+	apk add git nodejs npm openssh openssl shadow make python3
 
 # Copy Required Files
 COPY ./git-server /home/webadmin/git-server

@@ -9,6 +9,11 @@ import cors from 'cors';
 import morgan from 'morgan';
 import methodOverride from 'method-override';
 
+// Import & Initialize Database Connection
+import { RepositoryDB } from './Database';
+console.log('Initializing Database...');
+RepositoryDB.createDbInstance('repoDb.db');
+
 // Initialize Express app & Configure
 const app = express();
 app.use(cors({ origin: '*' }));
@@ -31,3 +36,12 @@ app.use(ErrorHandler);
 // Bind & Listen on Port
 console.log('GitServer: Listening on port 3000');
 app.listen(3000);
+
+// Clean up after process close
+process.on('exit', () => {
+  // Close Database Connection
+  console.log('Closing Database...');
+  const db = RepositoryDB.getDbInstance();
+  if (db)
+    db.close();
+});
