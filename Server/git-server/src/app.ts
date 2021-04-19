@@ -12,7 +12,7 @@ import methodOverride from 'method-override';
 // Import & Initialize Database Connection
 import { RepositoryDB } from './Database';
 console.log('Initializing Database...');
-RepositoryDB.createDbInstance('repoDb.db');
+RepositoryDB.createDbInstance(process.env.MONGODB_URL);
 
 // Initialize Express app & Configure
 const app = express();
