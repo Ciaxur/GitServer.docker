@@ -3,7 +3,8 @@
 export interface IRepository {
   title:        string,
   description?: string,
-  lastUpdated:  Date,
+  updatedAt:    Date,
+  createdAt:    Date,
 }
 
 /**
@@ -14,7 +15,7 @@ export interface IRepository {
 export const isRepository = (obj: any): obj is IRepository => {
   return (
     (obj as IRepository).title        !== undefined &&
-    (obj as IRepository).lastUpdated  !== undefined
+    (obj as IRepository).updatedAt  !== undefined
   );
 };
 

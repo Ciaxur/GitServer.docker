@@ -20,5 +20,10 @@ export const setRoutePath = async(newRoute: string, dispatch: RootDispatch) => {
  * @param dispatch Reducer Root Store Dispatcher
  */
 export const setRepoList = async(newList: IRepository[], dispatch: RootDispatch) => {
-  dispatch({ payload: newList, type: 'SET_REPO_LIST' });
+  // Clean then dispatch
+  dispatch({ payload: newList.map(elt => ({
+    ...elt,
+    createdAt: new Date(elt.createdAt),
+    updatedAt: new Date(elt.updatedAt),
+  })), type: 'SET_REPO_LIST' });
 };

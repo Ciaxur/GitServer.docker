@@ -68,7 +68,6 @@ function FieldInput(props: FieldProps) {
               width: props.fullWidth ? '100%'
                 : props.width || 256,
             }}
-            id='main-input'
             variant='outlined'
             size='small'
             error={props.error}

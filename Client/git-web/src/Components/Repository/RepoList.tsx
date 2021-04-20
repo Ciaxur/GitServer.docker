@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { ColorPalette } from '../../Styles';
+import { IRepository } from '.';
 
 // Material UI Imports
 import {
@@ -57,13 +58,13 @@ function RepoList({ spacing }: Props) {
   React.useEffect(() => {
     axios.get(`${serverIP}/repo`)
       .then(res => res.data)
-      .then(data => RootStoreActions.setRepoList(
-        data.data
-          ? data.data.map((r: string) => (
-            { title: r, lastUpdated: new Date() }
-          ))
-          : [],
-        dispatch))
+      .then(data => {
+        RootStoreActions.setRepoList(
+          (data.data
+            ? data.data as IRepository[]
+            : []),
+          dispatch);
+        })
       .catch(err => console.log('Fetch Repositories Error:', err));
   }, []);
 
@@ -78,7 +79,7 @@ function RepoList({ spacing }: Props) {
                   key={index}
                   name={elt.title}
                   description={elt.description}
-                  updatedAt={elt.lastUpdated}
+                  updatedAt={elt.updatedAt}
                   onClick={() => console.log(`${elt.title} Clicked!`)}
                 />
               ))
