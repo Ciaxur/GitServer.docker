@@ -1,14 +1,16 @@
 import React from 'react';
+import { IRepository } from '.';
 
 // Style Imports
 import { PaperElementPalette } from '../../Styles';
 
 // Material UI Imports
 import {
-  Paper,
+  Paper, Typography,
+  Box,
   makeStyles,
-  Typography,
 } from '@material-ui/core';
+
 
 
 
@@ -19,7 +21,7 @@ const useStyles = makeStyles( theme => ({
     padding: theme.spacing(2),
     textAlign: 'left',
     margin: '15px 0px',
-    
+
     color: PaperElementPalette.black,
     backgroundColor: PaperElementPalette.white,
     
@@ -33,6 +35,13 @@ const useStyles = makeStyles( theme => ({
       fontWeight: 'bold',
     },
   },
+  leftSection: {
+    flexGrow: 1,
+  },
+  rightSection: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   infoText: {
     color: PaperElementPalette.blueSecondary,
   },
@@ -43,23 +52,28 @@ const useStyles = makeStyles( theme => ({
 
 
 interface Props {
-  name:         string,
-  description?: string,
-  updatedAt:    Date,
-  onClick?:     () => void,
+  repo:         IRepository,
+  onClick?:     (repo: IRepository) => void,
 }
 
-function RepoItem({ name, description, updatedAt, onClick }: Props) {
+function RepoItem({ repo, onClick }: Props) {
   // Hooks
   const styles = useStyles();
   
   return (
-    <Paper className={styles.paper} variant='outlined' onClick={onClick}>
-      <Typography variant='subtitle1'>{name}</Typography>
-      <Typography className={styles.infoText} variant='body2'>{description || ''}</Typography>
-      <Typography className={`${styles.infoText} ${styles.mute}`} variant='caption'>
-        Updated {updatedAt.toLocaleString()}
-      </Typography>
+    <Paper className={styles.paper} variant='outlined' onClick={() => onClick && onClick(repo)}>
+      <Box display='flex' flexDirection='row'>
+        <div className={styles.leftSection}>
+          <Typography variant='subtitle1'>{repo.title}</Typography>
+          <Typography className={styles.infoText} variant='body2'>{repo.description || ''}</Typography>
+          <Typography className={`${styles.infoText} ${styles.mute}`} variant='caption'>
+            Updated {repo.updatedAt.toLocaleString()}
+          </Typography>
+        </div>
+        <div className={styles.rightSection}>
+          {/* Placeholder */}
+        </div>
+      </Box>
     </Paper>
   );
 }

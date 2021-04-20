@@ -11,6 +11,7 @@ import {
 
 // Component Imports
 import RepoItem from './RepoItem';
+import RepoInfoDialog from './RepoInfo';
 import * as RootStoreActions from '../../Store/RootStore/Actions';
 import { RootStoreContext } from '../../Store/RootStore';
 
@@ -41,6 +42,10 @@ const useStyles = makeStyles( () => ({
 }));
 
 
+interface RepoPopupInfo {
+  show: boolean,
+  repo: IRepository | null,
+}
 
 interface Props {
   spacing?: GridSize,   // Default Spacing = 12
@@ -54,6 +59,9 @@ function RepoList({ spacing }: Props) {
   // Repository List State
   const { repoList, loaded } = store.repoStore;
 
+  // State of Repo Info Dialog
+  const [repoPopup, setRepoPopup] = React.useState<RepoPopupInfo>({ show: false, repo: null });
+  
   // Fetch Repositories on Start
   React.useEffect(() => {
     axios.get(`${serverIP}/repo`)
@@ -77,10 +85,8 @@ function RepoList({ spacing }: Props) {
               repoList.map((elt, index) => (
                 <RepoItem
                   key={index}
-                  name={elt.title}
-                  description={elt.description}
-                  updatedAt={elt.updatedAt}
-                  onClick={() => console.log(`${elt.title} Clicked!`)}
+                  repo={elt}
+                  onClick={() => setRepoPopup({ show: true, repo: elt })}
                 />
               ))
               :
@@ -95,6 +101,15 @@ function RepoList({ spacing }: Props) {
           )
         }
       </Grid>
+
+      {/* Repository Information Dialog */}
+      { repoPopup.repo && (
+        <RepoInfoDialog
+          onClose={() => setRepoPopup({ ...repoPopup, show: false })}
+          isOpen={repoPopup.show}
+          repo={repoPopup.repo}
+        />
+      )}
     </Grid>
   );
 }
