@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { ColorPalette } from '../Styles';
 import { IRepository } from '../Interfaces/Repository';
+import { RootStoreContext, RepoActions } from '../Store/RootStore';
+
 // Material-UI Imports
 import {
   Container, Divider, CircularProgress,
@@ -55,6 +57,7 @@ function NewRepo() {
   // Hooks
   const styles = useStyles();
   const history = useHistory();
+  const { dispatch } = React.useContext(RootStoreContext);
 
   // States
   const [inputErrors, setInputErrors] = React.useState<InputErrors>(inputErrorsDefaults);
@@ -121,6 +124,7 @@ function NewRepo() {
         .then(res => res.data)
         .then(() => {
           setStatus({ ...status, success: true });
+          RepoActions.setRoutePath('/', dispatch);
           history.push('/');
         })
         .catch(err => {
@@ -133,7 +137,7 @@ function NewRepo() {
           if (status === 400) {       // Bad Request: Some Request Error done NOT by user
             return setInputErrors({
               ...inputErrors,
-              overallError: 'Unknown Bad Request Error',
+              overallError: err.response.data.error || 'Unknown Bad Request Error',
             });
           } 
           else if (status === 409) {  // Conflict: Duplicate Repo!

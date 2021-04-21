@@ -51,8 +51,14 @@ app.post('/', (req, res, next) => {
   const body: IRepository = req.body;
   const bodyValidation = RepositorySchema.validate(body);
   if (bodyValidation.error || hasSpace(body.title)) {
+    const errorType = bodyValidation
+      .error
+      .details[0].type || '';
+    
     throw new BadRequest(
-      'Invalid Request',
+      errorType === 'string.alphanum' 
+        ? 'Input must be alpha-numeric'
+        : 'Invalid Request',
       bodyValidation.error
         ? bodyValidation
         : 'Title has spaces'

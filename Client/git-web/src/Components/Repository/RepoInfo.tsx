@@ -1,17 +1,18 @@
 import React from 'react';
+import { RootStoreContext, RepoActions } from '../../Store/RootStore';
 import { PaperElementPalette } from '../../Styles';
 import { IRepository } from '.';
+import { ConfirmDialog} from '../Utils';
 
 // Material-UI Imports
 import {
   makeStyles,
   IconButton,
-  Dialog, DialogContent,
-  Box,
-  Typography,
-  DialogActions,
-  Button,
+  Dialog, DialogContent, Box, 
+  Typography, DialogActions, 
+  Button, Tooltip, Snackbar,
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import { 
   DeleteForeverOutlined as TrashIcon,
 } from '@material-ui/icons';
@@ -43,6 +44,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+
+interface InfoActions {
+  isConfirmDelete:  boolean,
+  errorMessage:     string,
+}
+
 interface Props {
   isOpen:   boolean,
   repo:     IRepository,
@@ -52,9 +59,46 @@ interface Props {
 function RepoInfo(props: Props) {
   // Hooks
   const styles = useStyles();
+  const { dispatch } = React.useContext(RootStoreContext);
+  
+  // States
+  const [infoActions, setInfoActions] = React.useState<InfoActions>({
+    isConfirmDelete: false, errorMessage: '',
+  });
   
   // Destructure Props
   const { repo } = props;
+  
+  // Callbacks
+  const onSnackbarClose = () => setInfoActions({
+    ...infoActions,
+    errorMessage: '',
+  });
+  
+  const onCloseConfirm = () => setInfoActions({
+    ...infoActions,
+    isConfirmDelete: false,
+  });
+  
+  const onDeleteRepo = () => setInfoActions({
+    ...infoActions,
+    isConfirmDelete: true,
+  });
+
+  const onDeleteRepoConfirmed = () => {
+    RepoActions.removeRepository(repo.title, dispatch)
+      .then(() => {       // Close Everything :)
+        onCloseConfirm();
+        props.onClose();
+      })
+      .catch(err => {     // Display Error on Info Dialog
+        setInfoActions({
+          ...infoActions,
+          isConfirmDelete: false,
+          errorMessage: err.message,
+        });
+      });
+  };
   
   return (
     <Dialog onClose={props.onClose} open={props.isOpen}>
@@ -64,9 +108,11 @@ function RepoInfo(props: Props) {
             {repo.title}
           </Typography>
 
-          <IconButton className={styles.trashBinBtn}>
-            <TrashIcon />
-          </IconButton>
+          <Tooltip title='Delete'>
+            <IconButton onClick={onDeleteRepo} className={styles.trashBinBtn}>
+              <TrashIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
 
         <DialogContent className={styles.body}>
@@ -86,6 +132,23 @@ function RepoInfo(props: Props) {
         </DialogActions>
       </Box>
 
+      {/* DIALOG: Confirm Repo Deletion */}
+      <ConfirmDialog
+        title='Delete Repository'
+        body='Are you sure you want to delete this repo?'
+        isOpen={infoActions.isConfirmDelete}
+        onClose={onCloseConfirm}
+        onConfirm={onDeleteRepoConfirmed}
+      />
+      <Snackbar
+        open={infoActions.errorMessage.length > 0}
+        autoHideDuration={2000}
+        onClose={onSnackbarClose}
+      >
+        <MuiAlert elevation={6} variant='filled' severity='error'>
+          {infoActions.errorMessage}
+        </MuiAlert>
+      </Snackbar>
     </Dialog>
   );
 }
