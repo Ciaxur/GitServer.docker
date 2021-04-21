@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import { RootStoreContext, RepoActions } from '../../Store/RootStore';
 import { PaperElementPalette } from '../../Styles';
 import { IRepository } from '.';
@@ -16,23 +17,32 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { 
   DeleteForeverOutlined as TrashIcon,
   FileCopyOutlined as CopyIcon,
+  EditOutlined as EditIcon,
 } from '@material-ui/icons';
 
 // Locally-Scoped Styles
 const useStyles = makeStyles(() => ({
   root: {
-    minWidth: '45vw',
-    minHeight: '15vh',
+    minWidth: '25rem',
   },
   trashBinBtn: {
     width: 35,
     height: 35,
-    margin: 10,
     
     '&:hover': {
       
       transition: 'color 200ms',
       color: PaperElementPalette.red,
+    },
+  },
+  editBtn: {
+    width: 35,
+    height: 35,
+    
+    '&:hover': {
+      
+      transition: 'color 200ms',
+      color: PaperElementPalette.bluePrimary,
     },
   },
   copyBtn: {
@@ -65,6 +75,7 @@ interface Props {
 function RepoInfo(props: Props) {
   // Hooks
   const styles = useStyles();
+  const history = useHistory();
   const { dispatch } = React.useContext(RootStoreContext);
   
   // Default Values
@@ -123,6 +134,12 @@ function RepoInfo(props: Props) {
         });
       });
   };
+
+  const onEditRepo = () => {
+    const URL = `/new-repo/${props.repo.title}`;
+    RepoActions.setRoutePath(URL, dispatch);
+    history.push(URL);
+  };
   
   return (
     <Dialog onClose={props.onClose} open={props.isOpen}>
@@ -139,11 +156,19 @@ function RepoInfo(props: Props) {
           </Typography>
 
 
-          <Tooltip title='Delete'>
-            <IconButton onClick={onDeleteRepo} className={styles.trashBinBtn}>
-              <TrashIcon />
-            </IconButton>
-          </Tooltip>
+          <div style={{ margin: 10 }}>
+            <Tooltip title='Delete'>
+              <IconButton onClick={onDeleteRepo} className={styles.trashBinBtn}>
+                <TrashIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='Edit'>
+              <IconButton onClick={onEditRepo} className={styles.editBtn}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+
         </Box>
 
         <DialogContent className={styles.body}>

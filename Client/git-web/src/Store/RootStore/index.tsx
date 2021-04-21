@@ -17,7 +17,7 @@ export interface IRootStore {
 
 export interface IRootStoreAction {
   type: 'SET_ROUTE' | 'SET_REPO_LIST' | 
-        'ADD_REPO' | 'REM_REPO' | 'SET_REPO',
+        'ADD_REPO' | 'REM_REPO',
   payload: string | IRepository | IRepository[],
   store?: IRootStore,
 }

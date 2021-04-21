@@ -63,7 +63,7 @@ function App() {
             <Route exact path='/'>
               <Home />
             </Route>
-            <Route path='/new-repo'>
+            <Route path='/new-repo/:repoName?'>
               <NewRepo />
             </Route>
           </Switch>

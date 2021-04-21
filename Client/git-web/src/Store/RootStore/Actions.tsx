@@ -72,3 +72,33 @@ export const getRepositoryLink = async(repoName:string): Promise<string> => {
       .catch(err => reject(err.response.data.error));
   });
 };
+
+/**
+ * Gets specific repository from Server
+ * @param repoName Repo's name to get
+ * @returns Repository URL
+ */
+export const getRepository = async(repoName:string): Promise<IRepository> => {
+  return new Promise((resolve, reject) => {
+    axios.get(`${serverIP}/repo/${repoName}`)
+      .then(res => res.data.data)
+      .then(data => (data && data.repo) ? resolve(data.repo) : reject(new Error('Repository not found')))
+      .catch(err => reject(err.response.data.error));
+  });
+};
+
+/**
+ * Updates existing repo with new data
+ * @param repoName Name of the old Repo
+ * @param newRepo New Repo data to update
+ * @param listState Current Repo Store list
+ * @param dispatch Reducer Root Store Dispatcher
+ */
+ export const updateRepository = async (repoName: string, newRepo: IRepository, listState: IRepository[], dispatch: RootDispatch) => {
+  // Create new Repository List
+  const newList = listState
+    .map(repo => repo.title.toLowerCase() === repoName.toLowerCase() ? newRepo : repo);
+
+  // Dispatch new list
+  dispatch({ payload: newList, type: 'SET_REPO_LIST' });
+};

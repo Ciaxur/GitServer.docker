@@ -130,6 +130,7 @@ export class RepositoryDB {
     }, {
       _title: repo.title,
       title: repo.title,
+      description: repo.description,
       updatedAt: Date.now(),
     }) as any;
   }

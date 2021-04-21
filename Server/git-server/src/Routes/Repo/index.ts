@@ -36,7 +36,7 @@ app.get('/:title', async (req, res) => {
   res.json({
     message: repoResult.length ? 'Repository Search found. 🚀' : 'Repository not found 😪',
     data: repoResult.length ? {
-      name: repoResult[0].title,
+      repo: repoResult[0],
       link: `git@localhost:${repoResult[0].title}.git`,
     } : null,
   });

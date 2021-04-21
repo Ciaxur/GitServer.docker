@@ -1,16 +1,19 @@
 import React from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { ColorPalette } from '../Styles';
 import { IRepository } from '../Interfaces/Repository';
+import { IRepository as IRepositoryQuery } from '../Components/Repository';
 import { RootStoreContext, RepoActions } from '../Store/RootStore';
 
 // Material-UI Imports
 import {
-  Container, Divider, CircularProgress,
   makeStyles,
+  Container, Divider, CircularProgress,
   Button, FormHelperText, Typography,
+  Snackbar,
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // Component Imports
 import FieldInput from '../Components/Inputs/FieldInput';
@@ -43,6 +46,12 @@ interface SubmitStatus {
   loading: boolean,
 }
 
+interface RepoModify {
+  repo?:          IRepositoryQuery,
+  notFound?:      boolean,
+  errorMessage?:  string,
+}
+
 const inputErrorsDefaults: InputErrors = {
   repoName: false,
   repoDescription: false,
@@ -57,15 +66,49 @@ function NewRepo() {
   // Hooks
   const styles = useStyles();
   const history = useHistory();
-  const { dispatch } = React.useContext(RootStoreContext);
+  const { repoName } = useParams() as any;
+  const { store, dispatch } = React.useContext(RootStoreContext);
 
   // States
   const [inputErrors, setInputErrors] = React.useState<InputErrors>(inputErrorsDefaults);
   const [status, setStatus] = React.useState<SubmitStatus>(statusDefaults);
+  const [repoModify, setRepoModify] = React.useState<RepoModify>({});
+  const [loading, setLoading] = React.useState<boolean>(false);
   
   // Refs
   const repoNameRef = React.createRef<HTMLInputElement>();
   const repoDescRef = React.createRef<HTMLInputElement>();
+
+  // Effects
+  React.useEffect(() => {
+    if (repoName) {
+      setLoading(true);
+      RepoActions.getRepository(repoName)
+        .then(repo => {
+          // Update the State
+          setLoading(false);
+          setRepoModify({
+            ...repoModify,
+            repo,
+            notFound: false,
+          });
+
+          // Update Input References
+          if (repoNameRef.current)
+            repoNameRef.current.value = repo.title;
+          if (repoDescRef.current)
+            repoDescRef.current.value = repo.description || '';
+        })
+        .catch(err => {
+          setLoading(false);
+          setRepoModify({
+            ...repoModify,
+            errorMessage: err.message,
+            notFound: true,
+          });
+        });
+    }
+  }, [ repoName ]);
 
   // Methods
   /**
@@ -105,7 +148,7 @@ function NewRepo() {
   /**
    * Submits the creation of the Repository
    */
-  const submit = () => {
+  const submit = (isEdit?: boolean) => {
     // Reset Status
     setStatus(statusDefaults);
     
@@ -114,15 +157,27 @@ function NewRepo() {
       setStatus({ ...status, loading: true });
       
       // Issue Request
-      const repoName = repoNameRef.current;
-      const repoDesc = repoDescRef.current;
+      const repoRefName = repoNameRef.current;
+      const repoRefDesc = repoDescRef.current;
 
-      axios.post(`${serverIP}/repo`, {
-        title: repoName?.value,
-        description: repoDesc?.value || undefined,
-      } as IRepository)
+      // Adjust Method based on submission
+      const data = {
+        title: repoRefName?.value,
+        description: repoRefDesc?.value || '',
+      } as IRepository;
+      
+      (
+        (isEdit && repoModify.repo)
+          ? axios.patch(`${serverIP}/repo/${repoModify.repo.title}`, data)
+          : axios.post(`${serverIP}/repo`, data)
+      )
         .then(res => res.data)
-        .then(() => {
+        .then(async () => {
+          if (repoModify.repo) {
+            const newRepoData = await RepoActions.getRepository(repoRefName?.value || '');
+            RepoActions.updateRepository(repoName, newRepoData, store.repoStore.repoList, dispatch);
+          }
+          
           setStatus({ ...status, success: true });
           RepoActions.setRoutePath('/', dispatch);
           history.push('/');
@@ -141,7 +196,7 @@ function NewRepo() {
             });
           } 
           else if (status === 409) {  // Conflict: Duplicate Repo!
-            repoName?.focus();
+            repoRefName?.focus();
             return setInputErrors({
               ...inputErrors,
               overallError: 'Repository Name is taken',
@@ -162,44 +217,68 @@ function NewRepo() {
   
   return (
     <Container maxWidth='md' className={styles.root} >
-      <FieldInput
-        title='Create new Repository'
-        titleVariant='h5'
-        description='Create a new repository internally with the details given'
-        noInput
-      />
+      {
+        loading ?
+          (<div style={{ textAlign: 'center' }}>
+            <CircularProgress style={{ color: ColorPalette.greyPrimary }} />
+          </div>)
+          :
+          (<>
+            <FieldInput
+              title={repoModify.repo ? `Editing ${repoModify.repo.title}` : 'Create new Repository'}
+              titleVariant='h5'
+              description={repoModify.repo ? '' : 'Create a new repository internally with the details given'}
+              noInput
+            />
 
-      <Divider />
+            <Divider />
 
-      <FieldInput
-        title='Repository Name'
-        description='Easy but descriptive name to your repository'
-        required
-        inputRef={repoNameRef}
-        style={{ marginTop: 10 }}
-        error={inputErrors.repoName}
-        errorText={inputErrors.repoNameErrStr}
-      />
+            <FieldInput
+              title='Repository Name'
+              description='Easy but descriptive name to your repository'
+              required
+              inputRef={repoNameRef}
+              style={{ marginTop: 10 }}
+              error={inputErrors.repoName}
+              errorText={inputErrors.repoNameErrStr}
+            />
 
-      <FieldInput
-        title='Repository Description'
-        description='Optional description about what the repository is about'
-        optional
-        inputRef={repoDescRef}
-        error={inputErrors.repoDescription}
-        errorText={inputErrors.repoDescriptionErrStr}
-        fullWidth
-      />
+            <FieldInput
+              title='Repository Description'
+              description='Optional description about what the repository is about'
+              optional
+              inputRef={repoDescRef}
+              error={inputErrors.repoDescription}
+              errorText={inputErrors.repoDescriptionErrStr}
+              fullWidth
+            />
 
-      <Divider />
+            <Divider />
 
-      <Button style={{ marginTop: 10 }} onClick={() => submit() }>Create Repository</Button>
-      <FormHelperText style={{ textAlign: 'center' }} error>{inputErrors.overallError}</FormHelperText>
-      
-      <div className={styles.successText}>
-        { status.loading && <CircularProgress style={{ color: ColorPalette.greyPrimary}} />}
-        {status.success && <Typography>Repository Successfully Created! 📦</Typography>}
-      </div>
+            {
+              repoModify.repo
+                ? <Button style={{ marginTop: 10 }} onClick={() => submit(true)}>Edit Repository</Button>
+                : <Button style={{ marginTop: 10 }} onClick={() => submit()}>Create Repository</Button>
+            }
+            <FormHelperText style={{ textAlign: 'center' }} error>{inputErrors.overallError}</FormHelperText>
+
+            <div className={styles.successText}>
+              {status.loading && <CircularProgress style={{ color: ColorPalette.greyPrimary }} />}
+              {status.success && <Typography>Repository Successfully Created! 📦</Typography>}
+            </div>
+
+            <Snackbar
+              open={repoModify.errorMessage !== undefined}
+              autoHideDuration={2000}
+              onClose={() => setRepoModify({})}
+            >
+              <MuiAlert elevation={6} variant='filled' severity='error'>
+                {repoModify.errorMessage}
+              </MuiAlert>
+            </Snackbar>
+          </>)
+      }
+
     </Container>
   );
 }
