@@ -1,5 +1,7 @@
 import React from 'react';
+import { ISearchState } from './StoreInterfaces';
 import { IRepository, isRepository, isRepositoryArray } from '../../Components/Repository';
+
 
 export interface IRootStore {
   store: {
@@ -10,15 +12,19 @@ export interface IRootStore {
     repoStore: {
       loaded:     boolean,
       repoList:   IRepository[],
+
+      // Search State
+      searchState: ISearchState,
     },
   },
   dispatch: React.Dispatch<IRootStoreAction>,
 }
 
 export interface IRootStoreAction {
-  type: 'SET_ROUTE' | 'SET_REPO_LIST' | 
-        'ADD_REPO' | 'REM_REPO',
-  payload: string | IRepository | IRepository[],
+  type: 'SET_ROUTE'        | 'SET_REPO_LIST'    | 
+        'ADD_REPO'         | 'REM_REPO'         | 
+        'SET_SEARCH_STATE' | 'SET_IS_SEARCHING',
+  payload: boolean | string | IRepository | IRepository[] | ISearchState,
   store?: IRootStore,
 }
 
@@ -85,6 +91,36 @@ export const RootStoreReducer = (state: IRootStore, action: IRootStoreAction): I
         },
       };
 
+    case 'SET_SEARCH_STATE':
+      return {
+        ...state,
+        store: {
+          ...state.store,
+          repoStore: {
+            ...state.store.repoStore,
+
+            // NOTE: Starts Here
+            searchState: payload as ISearchState,
+          },
+        },
+      };
+
+    case 'SET_IS_SEARCHING':
+      return {
+        ...state,
+        store: {
+          ...state.store,
+          repoStore: {
+            ...state.store.repoStore,
+
+            // NOTE: Starts Here
+            searchState: {
+              ...state.store.repoStore.searchState,
+              isSearching: payload as boolean,
+            },
+          },
+        },
+      };
     default:
       return state;
   }
@@ -96,6 +132,11 @@ export const RootStoreDefault: Partial<IRootStore> = {
     repoStore: {
       loaded: false,
       repoList: [],
+
+      searchState: {
+        isSearching: false,
+        filteredRepos: [],
+      },
     },
   },
 };

@@ -55,9 +55,20 @@ function RepoList({ spacing }: Props) {
   // Hooks
   const styles = useStyles();
   const { store, dispatch } = React.useContext(RootStoreContext);
+  const { searchState } = store.repoStore;
 
   // Repository List State
-  const { repoList, loaded } = store.repoStore;
+  const { repoList: repoListStore, loaded } = store.repoStore;
+
+  // Memoize which list to display
+  const repoList = React.useMemo(() => (
+    searchState.isSearching
+      ? searchState.filteredRepos
+      : repoListStore
+  ), [
+    repoListStore,
+    searchState,
+  ]);
 
   // State of Repo Info Dialog
   const [repoPopup, setRepoPopup] = React.useState<RepoPopupInfo>({ show: false, repo: null });

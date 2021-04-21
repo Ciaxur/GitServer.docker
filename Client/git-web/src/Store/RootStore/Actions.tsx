@@ -1,5 +1,6 @@
 import React from 'react';
 import { IRepository } from '../../Components/Repository';
+import { ISearchState } from './StoreInterfaces';
 import { IRootStoreAction } from './';
 import axios from 'axios';
 
@@ -101,4 +102,41 @@ export const getRepository = async(repoName:string): Promise<IRepository> => {
 
   // Dispatch new list
   dispatch({ payload: newList, type: 'SET_REPO_LIST' });
+};
+
+/**
+ * Filters Search State based on input. Turn off Filter by sending
+ *  an empty string
+ * 
+ * @param repoNameFilter Repo's name to filter Repository list using
+ * @param repoList Full Repository List to filter from
+ * @param dispatch Reducer Root Store Dispatcher
+ */
+ export const filterSearchState = async (repoNameFilter: string, repoList: IRepository[], dispatch: RootDispatch) => {
+  // Filter Repository List
+  const regex = RegExp(repoNameFilter, 'i');
+  const filteredList = repoList.filter( elt => elt.title.match(regex) );
+
+  // Update State
+  dispatch({
+    payload: {
+      isSearching: repoNameFilter !== '',
+      filteredRepos: filteredList,
+    } as ISearchState,
+    type: 'SET_SEARCH_STATE',
+  });
+};
+
+/**
+ * Sets Searching's state
+ * 
+ * @param isSearching State of searching
+ * @param dispatch Reducer Root Store Dispatcher
+ */
+export const setIsSearching = (isSearching: boolean, dispatch: RootDispatch) => {
+  // Update State
+  dispatch({
+    payload: isSearching,
+    type: 'SET_IS_SEARCHING',
+  });
 };

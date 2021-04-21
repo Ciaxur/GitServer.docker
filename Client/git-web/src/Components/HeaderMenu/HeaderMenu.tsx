@@ -1,4 +1,5 @@
 import React from 'react';
+import { RepoActions, RootStoreContext } from '../../Store/RootStore';
 
 import {
   AppBar,
@@ -81,7 +82,15 @@ interface Props {
 function HeaderMenu(props: Props) {
   // Hooks
   const styles = useStyles();
+  const { store, dispatch } = React.useContext(RootStoreContext);
 
+  // Callbacks
+  const onSearch = (strInput: string) => {
+    // Destructure for readability
+    const { repoList } = store.repoStore;
+    RepoActions.filterSearchState(strInput, repoList, dispatch);
+  };
+  
   return (
     <div className={styles.container}>
       <AppBar className={styles.bar} position="static">
@@ -113,6 +122,7 @@ function HeaderMenu(props: Props) {
                 root: styles.inputRoot,
                 input: styles.inputInput,
               }}
+              onChange={e => onSearch(e.target.value)}
               placeholder="Search..."
             />
           </div>
