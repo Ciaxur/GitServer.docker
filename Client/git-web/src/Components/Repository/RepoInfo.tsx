@@ -2,7 +2,7 @@ import React from 'react';
 import { RootStoreContext, RepoActions } from '../../Store/RootStore';
 import { PaperElementPalette } from '../../Styles';
 import { IRepository } from '.';
-import { ConfirmDialog} from '../Utils';
+import { ConfirmDialog } from '../Utils';
 
 // Material-UI Imports
 import {
@@ -15,6 +15,7 @@ import {
 import MuiAlert from '@material-ui/lab/Alert';
 import { 
   DeleteForeverOutlined as TrashIcon,
+  FileCopyOutlined as CopyIcon,
 } from '@material-ui/icons';
 
 // Locally-Scoped Styles
@@ -33,6 +34,11 @@ const useStyles = makeStyles(() => ({
       transition: 'color 200ms',
       color: PaperElementPalette.red,
     },
+  },
+  copyBtn: {
+    marginLeft: 5,
+    width: 15,
+    height: 15,
   },
   title: {
     padding: '20px 25px 15px',
@@ -61,7 +67,11 @@ function RepoInfo(props: Props) {
   const styles = useStyles();
   const { dispatch } = React.useContext(RootStoreContext);
   
+  // Default Values
+  const defaultLinkTooltip = 'Copy Link';
+  
   // States
+  const [linkTooltip, setLinkTooltip] = React.useState<string>(defaultLinkTooltip);
   const [infoActions, setInfoActions] = React.useState<InfoActions>({
     isConfirmDelete: false, errorMessage: '',
   });
@@ -70,6 +80,20 @@ function RepoInfo(props: Props) {
   const { repo } = props;
   
   // Callbacks
+  const onCopyLink = () => { 
+    RepoActions.getRepositoryLink(repo.title)
+      .then(url => {
+        setLinkTooltip('Copied!');
+        navigator.clipboard.writeText(url);
+      })
+      .catch(err => {
+        setInfoActions({
+          ...infoActions,
+          errorMessage: err.message,
+        });
+      });
+  };
+  
   const onSnackbarClose = () => setInfoActions({
     ...infoActions,
     errorMessage: '',
@@ -106,7 +130,14 @@ function RepoInfo(props: Props) {
         <Box display='flex' alignContent='center'>
           <Typography variant='h6' className={styles.title}>
             {repo.title}
+
+            <Tooltip onClose={() => setLinkTooltip(defaultLinkTooltip)} onClick={onCopyLink} title={linkTooltip}>
+              <IconButton className={styles.copyBtn}>
+                <CopyIcon className={styles.copyBtn} />
+              </IconButton>
+            </Tooltip>
           </Typography>
+
 
           <Tooltip title='Delete'>
             <IconButton onClick={onDeleteRepo} className={styles.trashBinBtn}>

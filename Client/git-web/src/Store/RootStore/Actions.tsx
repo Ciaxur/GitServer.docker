@@ -57,3 +57,18 @@ export const removeRepository = async (repoName: string, dispatch: RootDispatch)
       .catch(err => reject(err));
   });
 };
+
+
+/**
+ * Gets repository's url from the server.
+ * @param repoName Repo's name to get url of
+ * @returns Repository URL
+ */
+export const getRepositoryLink = async(repoName:string): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    axios.get(`${serverIP}/repo/${repoName}`)
+      .then(res => res.data.data)
+      .then(data => data.link ? resolve(data.link) : reject(new Error('Link not found')))
+      .catch(err => reject(err.response.data.error));
+  });
+};
