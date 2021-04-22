@@ -62,9 +62,10 @@ function RepoList({ spacing }: Props) {
 
   // Memoize which list to display
   const repoList = React.useMemo(() => (
-    searchState.isSearching
+    (searchState.isSearching
       ? searchState.filteredRepos
-      : repoListStore
+      : repoListStore)
+    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
   ), [
     repoListStore,
     searchState,

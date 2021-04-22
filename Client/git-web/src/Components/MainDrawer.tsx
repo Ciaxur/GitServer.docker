@@ -84,13 +84,6 @@ function MainDrawer({ onMenuToggle, isOpen }: Props) {
           <ListItemText primary='Create New Repo' />
         </ListItem>
       </List>
-      <Divider />
-      <List>
-        <ListItem button>
-          <ListItemIcon> <GitHub /> </ListItemIcon>
-          <ListItemText primary='Item' />
-        </ListItem>
-      </List>
     </Drawer>
   );
 }
