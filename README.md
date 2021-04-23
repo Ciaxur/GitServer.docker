@@ -29,13 +29,16 @@ In order to view or add a new repository, go to `localhost:8080` on your favorit
 **Add Repository**
 Go to the side panel then click on `Create New Repo`. Then proceed to fill in the repository information.
 
-<img src="screenshots/CreateRepo.png" width="60%"></img>
-
+<p align="center">
+  <img src="screenshots/CreateRepo.png"></img>
+</p>
 
 **Cloning Repository**
 After creating a repository, click on your repository entry in the home page then click on the Copy Link icon.
 
-<img src="screenshots/CopyRepoURL.png" width="60%"></img>
+<p align="center">
+  <img src="screenshots/CopyRepoURL.png"></img>
+</p>
 
 Then you're off! Clone using `git clone` with `git` as the user. The **password** is the generated password for the `git` user given by the variable `WEBADMIN_PASS`. The default password is **123**.
 ```sh
