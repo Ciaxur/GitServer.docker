@@ -1,4 +1,10 @@
 FROM alpine:latest
+ARG BUILD_DATE
+ARG VERSION
+
+# Lables
+LABEL build_version="GitServer.docker Version: ${VERSION} Build Date: ${BUILD_DATE}"
+LABEL maintainer="Ciaxur"
 
 # Setup Environment Install Packages
 RUN \

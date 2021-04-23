@@ -11,7 +11,6 @@ services:
       WEBADMIN_PASS: "$$6$$xyz$$73Q3Z.l5kN5BNAGMmP5IKozhqw3Zhj8bqQuJy3.Wf44.I3/nkSnzPMeX6rozvFiDHgi2DIt/BOc/lt14/2PH91"
     volumes:
       - "./logs:/logs"
-      - "./Client/git-web/dist:/var/www/localhost/htdocs/" # DEBUG:
     ports:
       - 8080:80
     deploy:
@@ -31,11 +30,12 @@ services:
       WEBADMIN_PASS: "$$6$$xyz$$73Q3Z.l5kN5BNAGMmP5IKozhqw3Zhj8bqQuJy3.Wf44.I3/nkSnzPMeX6rozvFiDHgi2DIt/BOc/lt14/2PH91"
       DEBUG_ENABLE: "false"   # Runs watch instead of build for Typescript build
       MONGODB_URL: "mongodb://root:password@192.168.0.3:27017" # MongoDB URL & Credentials
-      volumes:
-      - "./repos:/repos"
+    volumes:
+      - "./repos:/home/git"
       - "./logs:/logs"
     ports:
-      - 3030:3000
+      - 3000:3000
+      - "22:22"
     deploy:
       restart_policy:
         condition: on-failure

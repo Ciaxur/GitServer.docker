@@ -13,6 +13,6 @@ unset WEBADMIN_PASS
 GIT_WEB="webadmin/git-web"
 
 # Run Web Server
-cp $GIT_WEB/dist/* /var/www/localhost/htdocs/ -r
+cp -r $GIT_WEB/build/* /var/www/localhost/htdocs/
 httpd
 tail -f /var/log/apache2/access.log

@@ -19,6 +19,10 @@ RUN echo "Configuring NPM Proxy..." && \
 	echo "Running React Web App..." && \
 	npm run build
 
+# Clean up
+RUN echo "Cleaning up NPM Packages" && \
+	rm -rf /home/webadmin/git-web/node_modules
+
 # Explicitly Expose HTTP Port
 EXPOSE 80
 
