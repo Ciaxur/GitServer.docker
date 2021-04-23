@@ -1,0 +1,27 @@
+# TEST: Testing Only Docker Compose
+#  Build and Maps Volume to container for testing
+version: '3.9'
+services:
+  git-server:
+    build: .
+    depends_on:
+      - mongo
+    environment:
+      SERVER_PASS: "$$6$$xyz$$73Q3Z.l5kN5BNAGMmP5IKozhqw3Zhj8bqQuJy3.Wf44.I3/nkSnzPMeX6rozvFiDHgi2DIt/BOc/lt14/2PH91"
+      WEBADMIN_PASS: "$$6$$xyz$$73Q3Z.l5kN5BNAGMmP5IKozhqw3Zhj8bqQuJy3.Wf44.I3/nkSnzPMeX6rozvFiDHgi2DIt/BOc/lt14/2PH91"
+      DEBUG_ENABLE: "true"
+      MONGODB_URL: "mongodb://root:password@192.168.0.3:27017" # MongoDB URL & Credentials
+    volumes:
+      - './git-server/build:/home/webadmin/git-server/build'
+    ports:
+      - "3000:3000"
+      - "22:22"
+  
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
