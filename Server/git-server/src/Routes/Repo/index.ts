@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { IRepository, RepositorySchema } from '../../Schema/Repository';
 import { BadRequest } from '../../Middlewares/ErrorHandler/ErrorUtils';
 import * as Repo from '../../Actions/Repository';
+import { RepoWatcher } from './Watcher';
 const app = Router();
 
 // Import Database
@@ -76,6 +77,9 @@ app.post('/', (req, res, next) => {
     description: body.description,
   })
     .then(dbEntry => {
+      // Add watcher
+      RepoWatcher.Add(body);
+      
       res.json({
         message: `Repository "${body.title}" created successfuly 📦!`,
         debug: DEBUG_ENABLE ? { creationResult, dbEntry } : undefined,
@@ -97,6 +101,9 @@ app.delete('/:title', (req, res) => {
 
   // Remove entry from DB
   db.remove(title);
+
+  // Remove Listener
+  RepoWatcher.Remove({ title });
 
   res.json({
     message: 'Removed Repository 🗑',

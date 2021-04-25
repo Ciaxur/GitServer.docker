@@ -22,6 +22,11 @@ app.use(express.json({
   limit: '1mb',
 }));
 
+// Initialize Repository Watcher
+import { RepoWatcher } from './Routes/Repo/Watcher';
+console.log('Initializing RepoWatcher...');
+RepoWatcher.Init();
+
 // Route & Middleware Imports
 import { Repo } from './Routes';
 import ErrorHandler from './Middlewares/ErrorHandler';
@@ -49,6 +54,11 @@ process.on('exit', () => {
   // Close Database Connection
   console.log('Closing Database...');
   const db = RepositoryDB.getDbInstance();
+
+  // Close Repository Watcher
+  console.log('Closing RepoWatcher...');
+  RepoWatcher.Stop();
+  
   if (db)
     db.close();
 });

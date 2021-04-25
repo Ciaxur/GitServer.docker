@@ -63,6 +63,9 @@ export class RepositoryDB {
     if (this.dbInstance)
       return this.dbInstance;
     this.dbInstance = new RepositoryDB(url);
+
+    // Modify Mongoose Settings
+    mongoose.set('returnOriginal', false);    // Returns new Updated Data when Updated
   }
   
   /**
